@@ -20,6 +20,13 @@ internal class Program
 
                 foreach (var a in testOrderLinesDtos)
                 {
+                    a.Status = "В работе";
+                    db.test_order_lines.Update(a);
+                }
+                db.SaveChanges();
+
+                foreach (var a in testOrderLinesDtos)
+                {
                     TestOrderLinesDto testOrderLinesDto = new TestOrderLinesDto()
                     {
                         Id = a.Id,
