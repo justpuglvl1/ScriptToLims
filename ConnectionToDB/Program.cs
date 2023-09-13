@@ -2,16 +2,16 @@
 using ConnectionToDB.Models.Dto_models;
 using Newtonsoft.Json;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 
 internal class Program
 {
     static ApplicationContext db = new ApplicationContext();
     static HttpClient _httpClient = new HttpClient();
-    const string _apiUrl = @"https://localhost:7232/api/home/Post";
-    private static void Main(string[] args)
+    const string _apiUrl = @"https://localhost:7232/api/home/PostGre";
+    static async Task Main()
     {
-
         try
         {
             while (true)
@@ -43,7 +43,7 @@ internal class Program
                         Status = "В работе",
                     };
 
-                    UpdateOrder(testOrderLinesDto);
+                    await UpdateOrder(testOrderLinesDto);
 
                     Thread.Sleep(3000);
                 }
@@ -89,10 +89,10 @@ internal class Program
     /// </summary>
     /// <param name="TestOrder"></param>
     /// <returns></returns>
-    public static void UpdateOrder(TestOrderLinesDto TestOrder)
+    public static async Task UpdateOrder(TestOrderLinesDto TestOrder)
     {
         var json = JsonConvert.SerializeObject(TestOrder);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var result = _httpClient.PutAsync(_apiUrl , content);
+        var response = await _httpClient.PutAsync(_apiUrl, content);
     }
 }
