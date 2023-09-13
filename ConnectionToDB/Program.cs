@@ -43,7 +43,13 @@ internal class Program
                         Status = "В работе",
                     };
 
+
+
                     await UpdateOrder(testOrderLinesDto);
+
+                    a.Status = "В работе";
+                    db.test_order_lines.Update(a);
+                    db.SaveChanges();
 
                     Thread.Sleep(3000);
                 }
