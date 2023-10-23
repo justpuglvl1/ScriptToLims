@@ -19,7 +19,7 @@ namespace ConnectionToDB
         public ApplicationContext() { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=10.241.0.164;Port=5432;Database=limsDbTest;Username=postgres;Password=KbvcRb,thcnfkm");
+            optionsBuilder.UseNpgsql("Host=10.241.0.164;Port=5432;Database=limsDB;Username=postgres;Password=KbvcRb,thcnfkm");
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

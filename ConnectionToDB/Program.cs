@@ -9,7 +9,7 @@ internal class Program
 {
     static ApplicationContext db = new ApplicationContext();
     static HttpClient _httpClient = new HttpClient();
-    const string _apiUrl = @"https://localhost:7232/api/home/PostGre";
+    const string _apiUrl = @"https://localhost:7232/api/testorder/AddSampleDb";
     static async Task Main()
     {
         try
@@ -36,8 +36,6 @@ internal class Program
                         Status = "В работе",
                     };
 
-
-
                     await UpdateOrder(testOrderLinesDto);
 
                     a.Status = "В работе";
@@ -50,9 +48,9 @@ internal class Program
                 Thread.Sleep(300000);
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex){
             Console.WriteLine(ex.Message.ToString());
+            Console.ReadLine();
         }
     }
 
