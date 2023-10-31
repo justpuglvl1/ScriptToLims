@@ -1,20 +1,20 @@
 ﻿using ConnectionToDB;
 using ConnectionToDB.Models.Dto_models;
 using Newtonsoft.Json;
-using System.Net.Http;
-using System.Net.Http.Json;
+using System.Net;
 using System.Text;
 
 internal class Program
 {
     static ApplicationContext db = new ApplicationContext();
-    static HttpClient _httpClient = new HttpClient();
-    const string _apiUrl = @"https://10.241.0.164:443/api/testorder/AddSampleDb";
+    //static HttpClient _httpClient = new HttpClient();
+    const string _apiUrl = @"http://10.241.0.164:443/api/testorder/AddSampleDb"; 
 
     static async Task Main()
     {
         try
         {
+            HttpClient _httpClient = new HttpClient();
             while (true)
             {
                 List<TestOrderLinesDto> testOrderLinesDtos = db.test_order_lines.Where(x => x.Status == "Новая").ToList();
@@ -37,7 +37,7 @@ internal class Program
                         Status = "В работе",
                     };
 
-                    await UpdateOrder(testOrderLinesDto);
+                    await UpdateOrder(testOrderLinesDto, _httpClient);
 
                     a.Status = "В работе";
                     db.test_order_lines.Update(a);
@@ -49,7 +49,8 @@ internal class Program
                 Thread.Sleep(180000);
             }
         }
-        catch (Exception ex){
+        catch (Exception ex)
+        {
             Console.WriteLine(ex.Message.ToString());
             Console.ReadLine();
         }
@@ -87,7 +88,7 @@ internal class Program
     /// </summary>
     /// <param name="TestOrder"></param>
     /// <returns></returns>
-    public static async Task UpdateOrder(TestOrderLinesDto TestOrder)
+    public static async Task UpdateOrder(TestOrderLinesDto TestOrder, HttpClient _httpClient)
     {
         var json = JsonConvert.SerializeObject(TestOrder);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
