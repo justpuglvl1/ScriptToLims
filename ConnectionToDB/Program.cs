@@ -7,14 +7,13 @@ using System.Text;
 internal class Program
 {
     static ApplicationContext db = new ApplicationContext();
-    //static HttpClient _httpClient = new HttpClient();
+    static HttpClient _httpClient = new HttpClient();
     const string _apiUrl = @"http://10.241.0.164:443/api/testorder/AddSampleDb"; 
 
     static async Task Main()
     {
         try
         {
-            HttpClient _httpClient = new HttpClient();
             while (true)
             {
                 List<TestOrderLinesDto> testOrderLinesDtos = db.test_order_lines.Where(x => x.Status == "Новая").ToList();
@@ -37,12 +36,12 @@ internal class Program
                         Status = "В работе",
                     };
 
-                    await UpdateOrder(testOrderLinesDto, _httpClient);
+                    await UpdateOrder(testOrderLinesDto);
 
                     a.Status = "В работе";
                     db.test_order_lines.Update(a);
                     db.SaveChanges();
-
+                    await Console.Out.WriteLineAsync("Заявка:" + a.No + " получена");
                     Thread.Sleep(3000);
                 }
 
@@ -88,7 +87,7 @@ internal class Program
     /// </summary>
     /// <param name="TestOrder"></param>
     /// <returns></returns>
-    public static async Task UpdateOrder(TestOrderLinesDto TestOrder, HttpClient _httpClient)
+    public static async Task UpdateOrder(TestOrderLinesDto TestOrder)
     {
         var json = JsonConvert.SerializeObject(TestOrder);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
