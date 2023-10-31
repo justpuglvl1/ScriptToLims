@@ -8,7 +8,7 @@ internal class Program
 {
     static ApplicationContext db = new ApplicationContext();
     static HttpClient _httpClient = new HttpClient();
-    const string _apiUrl = @"http://10.241.0.164:443/api/testorder/AddSampleDb"; 
+    const string _apiUrl = @"http://10.241.0.164:443/api/TestOrder/AddSampleDb"; 
 
     static async Task Main()
     {
@@ -36,18 +36,23 @@ internal class Program
                         Status = "В работе",
                     };
 
-                    await UpdateOrder(testOrderLinesDto);
+                    bool bol = await UpdateOrder(testOrderLinesDto);
+                    if (bol)
+                    {
+                        a.Status = "В работе";
+                        db.test_order_lines.Update(a);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
 
-                    a.Status = "В работе";
-                    db.test_order_lines.Update(a);
-                    db.SaveChanges();
-                    await Console.Out.WriteLineAsync("Заявка:" + a.No + " получена");
+                    }
                     Thread.Sleep(3000);
                 }
 
                 Thread.Sleep(180000);
             }
-        }
+    }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message.ToString());
@@ -87,10 +92,20 @@ internal class Program
     /// </summary>
     /// <param name="TestOrder"></param>
     /// <returns></returns>
-    public static async Task UpdateOrder(TestOrderLinesDto TestOrder)
+    public static async Task<bool> UpdateOrder(TestOrderLinesDto TestOrder)
     {
         var json = JsonConvert.SerializeObject(TestOrder);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         var response = await _httpClient.PutAsync(_apiUrl, content);
+        if (response.IsSuccessStatusCode)
+        {
+            await Console.Out.WriteLineAsync("Заявка: " + TestOrder.No + " принята");
+            return true;
+        }
+        else
+        {
+            await Console.Out.WriteLineAsync(TestOrder.No + " " + response.Content.ToString());
+            return false;
+        }
     }
 }
