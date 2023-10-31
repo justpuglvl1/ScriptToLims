@@ -9,7 +9,7 @@ internal class Program
 {
     static ApplicationContext db = new ApplicationContext();
     static HttpClient _httpClient = new HttpClient();
-    const string _apiUrl = @"https://localhost:7232/api/testorder/AddSampleDb";
+    const string _apiUrl = @"https://10.241.0.164:443/api/testorder/AddSampleDb";
 
     static async Task Main()
     {
@@ -46,7 +46,7 @@ internal class Program
                     Thread.Sleep(3000);
                 }
 
-                Thread.Sleep(300000);
+                Thread.Sleep(180000);
             }
         }
         catch (Exception ex){
