@@ -2,6 +2,7 @@
 using ConnectionToDB.Models.Dto_models;
 using Newtonsoft.Json;
 using System.Net;
+using System.Net.Http.Json;
 using System.Text;
 
 internal class Program
